@@ -15,9 +15,9 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
   TextEditingController txtCategory = TextEditingController();
   TextEditingController txtName = TextEditingController();
   GlobalKey<FormState> key = GlobalKey<FormState>();
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     controller.getCategory();
   }
@@ -28,7 +28,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
       key: key,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Add Category"),
+          title: const Text("Add Category"),
           centerTitle: true,
         ),
         body: Column(
@@ -43,10 +43,10 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                   return null;
                 },
                 controller: txtCategory,
-                decoration: InputDecoration(border: OutlineInputBorder()),
+                decoration: const InputDecoration(border: OutlineInputBorder()),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             ElevatedButton(
@@ -57,7 +57,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                     controller.getCategory();
                   }
                 },
-                child: Text("ADD CATEGORY")),
+                child: const Text("ADD CATEGORY")),
             Expanded(
               child: Obx(
                 () => ListView.builder(
@@ -66,6 +66,42 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                     return ListTile(
                       leading: Text("${controller.l2[index].id}"),
                       title: Text("${controller.l2[index].name}"),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                              onPressed: () {
+                                DBHelper.helper
+                                    .deleteCategory(controller.l2[index].id!);
+                                controller.getCategory();
+                              },
+                              icon: Icon(Icons.delete)),
+                          IconButton(
+                              onPressed: () {
+                                txtName.text = controller.l2[index].name!;
+                                Get.defaultDialog(
+                                    title: "Update",
+                                    content: TextField(controller: txtName),
+                                    actions: [
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            String name = txtName.text;
+                                            DBHelper.helper.updateCategory(
+                                                name, controller.l2[index].id!);
+                                            controller.getCategory();
+                                            Get.back();
+                                          },
+                                          child: Text("Update")),
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            Get.back();
+                                          },
+                                          child: Text("cancel"))
+                                    ]);
+                              },
+                              icon: Icon(Icons.edit))
+                        ],
+                      ),
                     );
                   },
                 ),

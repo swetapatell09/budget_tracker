@@ -29,6 +29,12 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         )
       ]),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.toNamed('transaction');
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
