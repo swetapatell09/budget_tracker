@@ -55,6 +55,7 @@ class _AddCategoryScreenState extends State<AddCategoryScreen> {
                     String name = txtCategory.text;
                     DBHelper.helper.insertCategory(name);
                     controller.getCategory();
+                    txtCategory.clear();
                   }
                 },
                 child: const Text("ADD CATEGORY")),

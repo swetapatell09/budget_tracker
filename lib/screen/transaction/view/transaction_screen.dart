@@ -87,6 +87,22 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 ),
               ],
             ),
+            Obx(
+              () => DropdownButton(
+                value: tController.selectedValue.value,
+                isExpanded: true,
+                hint: Text("Select value"),
+                items: controller.l2
+                    .map((element) => DropdownMenuItem(
+                          child: Text("${element.name}"),
+                          value: "${element.name}",
+                        ))
+                    .toList(),
+                onChanged: (value) {
+                  tController.selectedValue.value = value!;
+                },
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -99,8 +115,11 @@ class _TransactionScreenState extends State<TransactionScreen> {
                             "${tController.date.value.day}/${tController.date.value.month}/${tController.date.value.year}",
                         time:
                             "${tController.time.value.hour}:${tController.time.value.minute}",
+                        category: "${tController.selectedValue}",
                         status: 0);
                     DBHelper.helper.insertTransaction(model);
+                    tController.getTransaction();
+                    Get.back();
                   },
                   child: Text("Income"),
                   style: ButtonStyle(
@@ -115,8 +134,11 @@ class _TransactionScreenState extends State<TransactionScreen> {
                             "${tController.date.value.day}/${tController.date.value.month}/${tController.date.value.year}",
                         time:
                             "${tController.time.value.hour}:${tController.time.value.minute}",
+                        category: "${tController.selectedValue}",
                         status: 1);
                     DBHelper.helper.insertTransaction(model);
+                    tController.getTransaction();
+                    Get.back();
                   },
                   child: Text("Expense"),
                   style: ButtonStyle(

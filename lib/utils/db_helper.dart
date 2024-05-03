@@ -72,4 +72,41 @@ class DBHelper {
       "status": model.status
     });
   }
+
+  Future<List<TransactionModel>> readTransaction() async {
+    var db = (await checkDb())!;
+    String transaction = "SELECT * FROM trans";
+    List<Map> l1 = await db.rawQuery(transaction);
+    List<TransactionModel> tList =
+        l1.map((e) => TransactionModel.mapToModel(e)).toList();
+    return tList;
+  }
+
+  void deleteTransaction(int id) async {
+    var db = (await checkDb())!;
+    db.delete("trans", where: "id=?", whereArgs: [id]);
+  }
+
+  void updateTransaction(
+      {required String title,
+      required String date,
+      required String time,
+      required String category,
+      required String amount,
+      required int status,
+      required int id}) async {
+    var db = (await checkDb())!;
+    db.update(
+        "trans",
+        {
+          "title": "$title",
+          "date": "$date",
+          "time": "$time",
+          "amount": "$amount",
+          "category": "$category",
+          "status": status
+        },
+        where: "id=?",
+        whereArgs: [id]);
+  }
 }
